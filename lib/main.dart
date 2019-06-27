@@ -1,18 +1,11 @@
-// Flutter code sample for material.ListTile.5
-
-// Here is an example of an article list item with multi-line titles and
-// subtitles. It utilizes [Row]s and [Column]s, as well as [Expanded] and
-// [AspectRatio] widgets to organize its layout.
-//
-// ![Custom list item b](https://flutter.github.io/assets-for-api-docs/assets/widgets/custom_list_item_b.png)
-
 import 'package:flutter/material.dart';
+import 'constants.dart';
 
 void main() => runApp(MyApp());
 
 /// This Widget is the main application widget.
 class MyApp extends StatelessWidget {
-  static const String _title = 'Flutter Code Sample';
+  static const String _title = 'Your Very Simple TODO List';
 
   @override
   Widget build(BuildContext context) {
@@ -20,168 +13,95 @@ class MyApp extends StatelessWidget {
       title: _title,
       home: Scaffold(
         appBar: AppBar(title: Text(_title)),
-        body: MyStatelessWidget(),
+        body: TodoList(),
       ),
     );
   }
 }
 
-class _ArticleDescription extends StatelessWidget {
-  _ArticleDescription({
-    Key key,
-    this.title,
-    this.subtitle,
-    this.author,
-    this.publishDate,
-    this.readDuration,
-  }) : super(key: key);
-
-  final String title;
-  final String subtitle;
-  final String author;
-  final String publishDate;
-  final String readDuration;
-
+class TodoList extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Expanded(
-          flex: 2,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                '$title',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Padding(padding: EdgeInsets.only(bottom: 2.0)),
-              Text(
-                '$subtitle',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 12.0,
-                  color: Colors.black54,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Text(
-                '$author',
-                style: const TextStyle(
-                  fontSize: 12.0,
-                  color: Colors.black87,
-                ),
-              ),
-              Text(
-                '$publishDate · $readDuration ★',
-                style: const TextStyle(
-                  fontSize: 12.0,
-                  color: Colors.black54,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+  _TodoListState createState() => _TodoListState();
 }
 
-class CustomListItemTwo extends StatelessWidget {
-  CustomListItemTwo({
-    Key key,
-    this.thumbnail,
-    this.title,
-    this.subtitle,
-    this.author,
-    this.publishDate,
-    this.readDuration,
-  }) : super(key: key);
+class _TodoListState extends State<TodoList> {
+  @override
+  void initState() {
+    super.initState();
+    todos = [];
+  }
 
-  final Widget thumbnail;
-  final String title;
-  final String subtitle;
-  final String author;
-  final String publishDate;
-  final String readDuration;
+  List<String> todos;
+  String newTodo;
+  final inputTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: SizedBox(
-        height: 100,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            AspectRatio(
-              aspectRatio: 1.0,
-              child: thumbnail,
+    return SafeArea(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: todos.isNotEmpty
+                  ? ListView(
+                      children: todos.map((e) {
+                        return Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Material(
+                            color: Colors.blueAccent,
+                            borderRadius: BorderRadius.circular(15.0),
+                            elevation: 5.0,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(
+                                e,
+                                style: kTodoTextStyle,
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    )
+                  : Text(
+                      'Empty.',
+                      style: kEmptyListTextStyle,
+                    ),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 0.0, 2.0, 0.0),
-                child: _ArticleDescription(
-                  title: title,
-                  subtitle: subtitle,
-                  author: author,
-                  publishDate: publishDate,
-                  readDuration: readDuration,
+          ),
+          Container(
+            decoration: kMessageContainerDecoration,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: TextField(
+                    controller: inputTextController,
+                    onChanged: (value) {
+                      newTodo = value;
+                    },
+                    decoration: kMessageTextFieldDecoration,
+                  ),
                 ),
-              ),
-            )
-          ],
-        ),
+                FlatButton(
+                  onPressed: () {
+                    inputTextController.clear();
+                    setState(() {
+                      todos.add(newTodo);
+                    });
+                  },
+                  child: Text(
+                    'Save',
+                    style: kSaveButtonTextStyle,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-    );
-  }
-}
-
-/// This is the stateless widget that the main application instantiates.
-class MyStatelessWidget extends StatelessWidget {
-  MyStatelessWidget({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(10.0),
-      children: <Widget>[
-        CustomListItemTwo(
-          thumbnail: Container(
-            decoration: const BoxDecoration(color: Colors.pink),
-          ),
-          title: 'Flutter 1.0 Launch',
-          subtitle: 'Flutter continues to improve and expand its horizons.'
-              'This text should max out at two lines and clip',
-          author: 'Dash',
-          publishDate: 'Dec 28',
-          readDuration: '5 mins',
-        ),
-        CustomListItemTwo(
-          thumbnail: Container(
-            decoration: const BoxDecoration(color: Colors.blue),
-          ),
-          title: 'Flutter 1.2 Release - Continual updates to the framework',
-          subtitle: 'Flutter once again improves and makes updates.',
-          author: 'Flutter',
-          publishDate: 'Feb 26',
-          readDuration: '12 mins',
-        ),
-      ],
     );
   }
 }
