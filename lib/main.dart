@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'constants.dart';
+import 'todo_item.dart';
 
 void main() => runApp(MyApp());
 
@@ -29,6 +31,33 @@ class _TodoListState extends State<TodoList> {
   void initState() {
     super.initState();
     todos = [];
+    _getTodos();
+  }
+
+  _getTodos() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      todos = (prefs.getStringList('todos') ?? []);
+    });
+  }
+
+  _saveTodos() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('todos', todos);
+  }
+
+  void addTodo(String item) {
+    setState(() {
+      todos.add(newTodo);
+    });
+    _saveTodos();
+  }
+
+  void removeTodo(String item) {
+    setState(() {
+      todos.remove(item);
+    });
+    _saveTodos();
   }
 
   List<String> todos;
@@ -48,25 +77,13 @@ class _TodoListState extends State<TodoList> {
               child: todos.isNotEmpty
                   ? ListView(
                       children: todos.map((e) {
-                        return Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Material(
-                            color: Colors.blueAccent,
-                            borderRadius: BorderRadius.circular(15.0),
-                            elevation: 5.0,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text(
-                                e,
-                                style: kTodoTextStyle,
-                              ),
-                            ),
-                          ),
-                        );
+                        return TodoItem(e, () {
+                          removeTodo(e);
+                        });
                       }).toList(),
                     )
                   : Text(
-                      'Empty.',
+                      'Add a new TODO below.',
                       style: kEmptyListTextStyle,
                     ),
             ),
@@ -88,9 +105,7 @@ class _TodoListState extends State<TodoList> {
                 FlatButton(
                   onPressed: () {
                     inputTextController.clear();
-                    setState(() {
-                      todos.add(newTodo);
-                    });
+                    addTodo(newTodo);
                   },
                   child: Text(
                     'Save',
