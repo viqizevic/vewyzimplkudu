@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'constants.dart';
 import 'components/todo_item.dart';
+import 'components/todo_input.dart';
 
 void main() => runApp(MyApp());
 
@@ -49,7 +50,7 @@ class _TodoListState extends State<TodoList> {
   void addTodo(String item) {
     if (null == item || "" == item) return;
     setState(() {
-      todos.add(newTodo);
+      todos.add(item);
     });
     _saveTodos();
   }
@@ -62,8 +63,6 @@ class _TodoListState extends State<TodoList> {
   }
 
   List<String> todos;
-  String newTodo;
-  final inputTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -90,34 +89,7 @@ class _TodoListState extends State<TodoList> {
                     ),
             ),
           ),
-          Container(
-            decoration: kMessageContainerDecoration,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    controller: inputTextController,
-                    onChanged: (value) {
-                      newTodo = value;
-                    },
-                    decoration: kMessageTextFieldDecoration,
-                  ),
-                ),
-                FlatButton(
-                  onPressed: () {
-                    newTodo = inputTextController.text;
-                    inputTextController.clear();
-                    addTodo(newTodo);
-                  },
-                  child: Text(
-                    'Save',
-                    style: kSaveButtonTextStyle,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          TodoInput(addTodo),
         ],
       ),
     );
