@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'constants.dart';
+import 'package:very_simple_todo_app/constants.dart';
 
 class TodoItem extends StatelessWidget {
   TodoItem(this.todoText, this.onPressRemove);
@@ -21,9 +21,8 @@ class TodoItem extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(
-                todoText,
-                style: kTodoTextStyle,
+              Expanded(
+                child: Text(todoText, style: kTodoTextStyle),
               ),
               GestureDetector(
                 onTap: onPressRemove,

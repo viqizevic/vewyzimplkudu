@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'constants.dart';
-import 'todo_item.dart';
+import 'components/todo_item.dart';
 
 void main() => runApp(MyApp());
 
 /// This Widget is the main application widget.
 class MyApp extends StatelessWidget {
-  static const String _title = 'Your Very Simple TODO List';
+  static const String _title = 'Your Simple TODO List';
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +47,7 @@ class _TodoListState extends State<TodoList> {
   }
 
   void addTodo(String item) {
+    if (null == item || "" == item) return;
     setState(() {
       todos.add(newTodo);
     });
@@ -75,15 +76,16 @@ class _TodoListState extends State<TodoList> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: todos.isNotEmpty
-                  ? ListView(
-                      children: todos.map((e) {
-                        return TodoItem(e, () {
-                          removeTodo(e);
+                  ? ListView.builder(
+                      itemBuilder: (ctx, index) {
+                        return TodoItem(todos[index], () {
+                          removeTodo(todos[index]);
                         });
-                      }).toList(),
+                      },
+                      itemCount: todos.length,
                     )
                   : Text(
-                      'Add a new TODO below.',
+                      'Click the \'+\' button to add a new TODO.',
                       style: kEmptyListTextStyle,
                     ),
             ),
@@ -104,6 +106,7 @@ class _TodoListState extends State<TodoList> {
                 ),
                 FlatButton(
                   onPressed: () {
+                    newTodo = inputTextController.text;
                     inputTextController.clear();
                     addTodo(newTodo);
                   },
