@@ -3,10 +3,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:very_simple_todo_app/constants.dart';
 
 class TodoItem extends StatelessWidget {
-  TodoItem(this.todoText, this.onPressRemove);
+  TodoItem(this.todoText, this.shouldShowDeleteButton, this.onPressRemove);
 
   final String todoText;
   final Function onPressRemove;
+  final bool shouldShowDeleteButton;
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +25,14 @@ class TodoItem extends StatelessWidget {
               Expanded(
                 child: Text(todoText, style: kTodoTextStyle),
               ),
-              GestureDetector(
-                onTap: onPressRemove,
-                child: Icon(
-                  FontAwesomeIcons.trash,
-                  size: 20.0,
+              Visibility(
+                visible: shouldShowDeleteButton,
+                child: GestureDetector(
+                  onTap: onPressRemove,
+                  child: Icon(
+                    FontAwesomeIcons.trash,
+                    size: 20.0,
+                  ),
                 ),
               ),
             ],

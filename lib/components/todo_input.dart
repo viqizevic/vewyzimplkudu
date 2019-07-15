@@ -1,11 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:very_simple_todo_app/constants.dart';
 
-class TodoInput extends StatelessWidget {
+class TodoInput extends StatefulWidget {
   TodoInput(this.addTodo);
 
-  final inputTextController = TextEditingController();
   final Function addTodo;
+
+  @override
+  _TodoInputState createState() => _TodoInputState();
+}
+
+class _TodoInputState extends State<TodoInput> {
+  final inputTextController = TextEditingController();
+
+  void _submitData() {
+    final enteredTodo = inputTextController.text;
+    if (enteredTodo.isEmpty) {
+      return;
+    }
+    widget.addTodo(enteredTodo);
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,15 +33,13 @@ class TodoInput extends StatelessWidget {
             child: TextField(
               controller: inputTextController,
               decoration: kMessageTextFieldDecoration,
+              onSubmitted: (_) => _submitData(),
             ),
           ),
           FlatButton(
-            onPressed: () {
-              addTodo(inputTextController.text);
-              inputTextController.clear();
-            },
+            onPressed: _submitData,
             child: Text(
-              'Save',
+              'Add TODO',
               style: kSaveButtonTextStyle,
             ),
           ),
