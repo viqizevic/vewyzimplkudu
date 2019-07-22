@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 
 const kMessageTextFieldDecoration = InputDecoration(
   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+  labelText: 'TODO',
   hintText: 'New TODO',
   border: InputBorder.none,
-);
-
-const kMessageContainerDecoration = BoxDecoration(
-  border: Border(
-    top: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-  ),
 );
 
 const kEmptyListTextStyle = TextStyle(
@@ -24,7 +19,7 @@ const kTodoTextStyle = TextStyle(
 );
 
 const kSaveButtonTextStyle = TextStyle(
-  color: Colors.lightBlueAccent,
+  color: Colors.white,
   fontWeight: FontWeight.bold,
   fontSize: 18.0,
 );

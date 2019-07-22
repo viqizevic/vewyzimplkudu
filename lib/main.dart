@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
 }
 
 class TodoList extends StatefulWidget {
-  String title;
+  final String title;
   TodoList(this.title);
   @override
   _TodoListState createState() => _TodoListState();
@@ -71,7 +71,7 @@ class _TodoListState extends State<TodoList> {
       builder: (_) {
         return GestureDetector(
           onTap: () {},
-          child: SafeArea(child: TodoInput(addTodo)),
+          child: TodoInput(addTodo),
           behavior: HitTestBehavior.opaque,
         );
       },

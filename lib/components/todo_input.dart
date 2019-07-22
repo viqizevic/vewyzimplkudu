@@ -24,26 +24,28 @@ class _TodoInputState extends State<TodoInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: kMessageContainerDecoration,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            child: TextField(
+    return Card(
+      elevation: 5,
+      child: Container(
+        padding: EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            TextField(
               controller: inputTextController,
               decoration: kMessageTextFieldDecoration,
               onSubmitted: (_) => _submitData(),
             ),
-          ),
-          FlatButton(
-            onPressed: _submitData,
-            child: Text(
-              'Add TODO',
-              style: kSaveButtonTextStyle,
+            RaisedButton(
+              onPressed: _submitData,
+              color: Colors.blueAccent,
+              child: Text(
+                'Add',
+                style: kSaveButtonTextStyle,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
